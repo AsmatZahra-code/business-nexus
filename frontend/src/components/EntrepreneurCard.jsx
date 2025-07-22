@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from './Button';
 import Card from './Card'; // Make sure the path is correct
-
+import { Link } from 'react-router-dom';
 const EntrepreneurCard = ({ entrepreneur, onRequest }) => {
   const { name, startup, pitch, _id } = entrepreneur;
 
@@ -19,6 +19,11 @@ const EntrepreneurCard = ({ entrepreneur, onRequest }) => {
         </p>
       )}
       <Button onClick={() => onRequest(_id)}>Message / Request</Button>
+        <Link to={`/chat/${entrepreneur._id}`}>
+        <button className="mt-2 ml-2 px-4 py-1 bg-green-500 text-white rounded">
+          Chat
+        </button>
+      </Link>
     </Card>
   );
 };

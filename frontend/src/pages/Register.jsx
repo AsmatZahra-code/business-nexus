@@ -29,16 +29,11 @@ const Register = () => {
     try {
       const user = await registerUser({ name, email, password,  role });
 
-      if ( user.role === "Investor") {
-        navigate("/dashboard/investor");
-      } else if (user.role === "Entrepreneur") {
-        navigate("/dashboard/entrepreneur");
-      } else {
-        navigate("/");
-      }
-    } catch (err) {
-      alert(err);
-    }
+      alert("Registration successful! Please login.");
+    navigate("/"); // 🚀 Send user to login after registration
+  } catch (err) {
+    alert("Registration failed. " + err.message || err);
+  }
   };
 
   return (
