@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from '../../api/axiosConfig';
 import { jwtDecode } from 'jwt-decode';
 import EditProfileModal from '../../components/EditProfileModal';
+import defAvatar from '../../assets/avatar-def.png'
 
 const MyProfile = () => {
   const [user, setUser] = useState(null);
@@ -51,6 +52,18 @@ const MyProfile = () => {
       </div>
 
       <div className="bg-white shadow-md rounded-lg p-6">
+    <div className="mb-4">
+  <img
+  //  src={user.avatar ? `http://localhost:5000${user.avatar}` : defAvatar}
+   src={
+    user.avatar
+      ? `http://localhost:5000${user.avatar}?t=${new Date().getTime()}`
+      : defAvatar
+  }
+    alt="Profile Avatar"
+    className="w-30 h-24 rounded-lg object-cover"
+  />
+</div>
         <p><strong>Name:</strong> {user.name}</p>
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Role:</strong> {user.role}</p>

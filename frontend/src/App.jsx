@@ -10,12 +10,14 @@ import MyProfile from "./pages/Profile/MyProfile"
 import UserProfile from "./pages/Profile/UserProfile"
 import InvestorList from "./pages/Profile/InvestorList"
 import EntrepreneurList from "./pages/Profile/entrepreneurList"
+import LandingPage from "./pages/LandingPage";
 import Chat from './pages/Chat';
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />}></Route>
+        <Route path="/" element={<LandingPage />}></Route>
+        <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
         <Route
           path="/dashboard/investor"

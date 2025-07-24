@@ -1,18 +1,19 @@
 const User = require('../models/User');
 
-
 exports.getProfile = async (req, res) => {
   try {
-     console.log("Requested ID:", req.params.id);
-    const userId = req.user.id; // Extracted from decoded token
-    const user = await User.findById(userId).select('-password'); // Exclude password
+    const requestedId = req.params.id === "me" ? req.user.id : req.params.id;
 
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    console.log("Fetching profile for ID:", requestedId);
+
+    const user = await User.findById(requestedId).select("-password");
+
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     res.json(user);
   } catch (error) {
-    console.error('Get profile error:', error);
-    res.status(500).json({ message: 'Server error fetching profile' });
+    console.error("Get profile error:", error);
+    res.status(500).json({ message: "Server error fetching profile" });
   }
 };
 

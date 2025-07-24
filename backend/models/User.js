@@ -1,5 +1,5 @@
 // backend/models/User.js
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -23,23 +23,25 @@ const userSchema = new mongoose.Schema({
 
   role: {
     type: String,
-    enum: ['Investor', 'Entrepreneur'],
+    enum: ["Investor", "Entrepreneur"],
     required: true,
   },
 
   // Shared
   bio: { type: String }, // Short bio for both roles
 
+  startup: { type: String }, // Optional
+  pitch: { type: String }, // Optional
+  pitchDeck: { type: String }, // Link to full pitch deck (PDF)
+  fundingNeed: { type: String }, // Funding amount or description
 
-  startup: { type: String },            // Optional
-  pitch: { type: String },              // Optional
-   pitchDeck: { type: String },     // Link to full pitch deck (PDF)
-  fundingNeed: { type: String },   // Funding amount or description
+  investmentInterests: [{ type: String }], // e.g., ['Tech', 'Healthcare']
+  portfolioCompanies: [{ type: String }], // List of startups they've invested in
 
-
-  investmentInterests: [{ type: String }],     // e.g., ['Tech', 'Healthcare']
-  portfolioCompanies: [{ type: String }],      // List of startups they've invested in
-
+  avatar: {
+    type: String,
+    default: "", // or provide a default image URL
+  },
 
   createdAt: {
     type: Date,
@@ -47,6 +49,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

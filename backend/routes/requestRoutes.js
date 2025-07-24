@@ -67,7 +67,7 @@ router.get('/entrepreneur/:id', async (req, res) => {
     const entrepreneurId = req.params.id;
 
     const requests = await Request.find({ entrepreneurId })
-      .populate('investorId', 'name bio')
+      .populate('investorId', 'name bio avatar')
       .sort({ createdAt: -1 });
 
     res.json(requests);
@@ -77,5 +77,48 @@ router.get('/entrepreneur/:id', async (req, res) => {
   }
 });
 
+// GET /api/requests/investor/:id
+router.get('/investor/:id', async (req, res) => {
+  try {
+    const investorId = req.params.id;
+
+    const requests = await Request.find({ investorId })
+      .populate("entrepreneurId", "name bio avatar") // 👈 Optional: populate entrepreneur info
+      .sort({ createdAt: -1 });
+
+    res.json(requests);
+  } catch (err) {
+    console.error('Error fetching investor requests:', err);
+    res.status(500).json({ message: 'Server error fetching investor requests' });
+  }
+});
+
+// PATCH /api/requests/:id - Update request status
+router.patch('/:id', async (req, res) => {
+  try {
+    const requestId = req.params.id;
+    const { status } = req.body;
+
+    // Validate status
+    if (!["Pending", "Accepted", "Rejected"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
+
+    const updatedRequest = await Request.findByIdAndUpdate(
+      requestId,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedRequest) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+    res.json(updatedRequest);
+  } catch (err) {
+    console.error("Error updating request:", err);
+    res.status(500).json({ message: "Server error updating request" });
+  }
+});
 
 module.exports = router;

@@ -48,6 +48,9 @@ const requestRoutes = require('./routes/requestRoutes');
 const { getRoomId } = require('./utils/socketUtils'); 
 const profileRoutes = require('./routes/profileRoutes');
 const chatRoutes = require('./routes/chatRoutes'); // ✅ Assuming you have a chat route
+const avatarRoutes = require('./routes/avatarRoutes'); // adjust path as needed
+
+
 const path = require('path');
 
 dotenv.config();
@@ -105,5 +108,6 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.use('/api/avatar', avatarRoutes);   // this means POST will be at /api/profile/avatar
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server started on port ${PORT}`)); // ✅ Listen using server

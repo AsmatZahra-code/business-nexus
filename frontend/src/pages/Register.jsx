@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { FaGoogle, FaFacebookF } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -11,29 +10,38 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [phone, setPhone] = useState('');
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const validateForm = () => {
+    const newErrors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name.trim()) newErrors.name = "Name is required.";
+
+    if (!emailRegex.test(email)) newErrors.email = "Enter a valid email address.";
+
+    if (!role) newErrors.role = "Please select a role.";
+
+    if (password.length < 8) newErrors.password = "Password must be at least 8 characters long.";
+
+    if (password !== confirmPassword) newErrors.confirmPassword = "Passwords do not match.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-
-    if (!role) {
-      alert("Please select a role.");
-      return;
-    }
+    if (!validateForm()) return;
 
     try {
-      const user = await registerUser({ name, email, password,  role });
-
+      const user = await registerUser({ name, email, password, role });
       alert("Registration successful! Please login.");
-    navigate("/"); // 🚀 Send user to login after registration
-  } catch (err) {
-    alert("Registration failed. " + err.message || err);
-  }
+      navigate("/");
+    } catch (err) {
+      alert("Registration failed. " + (err.message || err));
+    }
   };
 
   return (
@@ -55,9 +63,11 @@ const Register = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
-              required
-              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-3 py-2 border ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              } rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
             />
+            {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name}</p>}
           </div>
 
           {/* Email + Phone */}
@@ -69,10 +79,13 @@ const Register = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
-                required
-                className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className={`mt-1 block w-full px-3 py-2 border ${
+                  errors.email ? "border-red-500" : "border-gray-300"
+                } rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
               />
+              {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
             </div>
+
             <div className="w-1/2">
               <label className="block text-sm font-medium text-gray-700">Phone</label>
               <input
@@ -80,7 +93,7 @@ const Register = () => {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Phone"
-                className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
           </div>
@@ -92,14 +105,17 @@ const Register = () => {
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                required
-                className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className={`mt-1 block w-full px-3 py-2 border ${
+                  errors.role ? "border-red-500" : "border-gray-300"
+                } rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
               >
                 <option value="">Select</option>
                 <option value="Investor">Investor</option>
                 <option value="Entrepreneur">Entrepreneur</option>
               </select>
+              {errors.role && <p className="text-sm text-red-500 mt-1">{errors.role}</p>}
             </div>
+
             <div className="w-1/2">
               <label className="block text-sm font-medium text-gray-700">Password *</label>
               <input
@@ -107,9 +123,11 @@ const Register = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
-                required
-                className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className={`mt-1 block w-full px-3 py-2 border ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
               />
+              {errors.password && <p className="text-sm text-red-500 mt-1">{errors.password}</p>}
             </div>
           </div>
 
@@ -121,9 +139,11 @@ const Register = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm password"
-              required
-              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-3 py-2 border ${
+                errors.confirmPassword ? "border-red-500" : "border-gray-300"
+              } rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
             />
+            {errors.confirmPassword && <p className="text-sm text-red-500 mt-1">{errors.confirmPassword}</p>}
           </div>
 
           {/* Submit Button */}

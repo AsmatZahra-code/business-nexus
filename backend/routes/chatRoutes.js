@@ -12,8 +12,8 @@ router.get('/:userId', async (req, res) => {
       { senderId: currentUserId, receiverId: userId },
       { senderId: userId, receiverId: currentUserId }
     ]
-  }).sort({ timestamp: 1 });
-
+  }).sort({ timestamp: 1 })
+.populate('senderId', 'name avatar');
   res.json(messages);
 });
 
